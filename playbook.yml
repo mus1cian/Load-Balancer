@@ -2,7 +2,8 @@
   become: true
   tasks:
     - name: Start Docker service
-      command: service docker start
+      command: sudo service docker start
+      ignore_errors: yes
 
 - hosts: ['localhost']
   become: yes

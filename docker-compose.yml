@@ -57,7 +57,7 @@ services:
     tty: true
 
 
-  nginx:
+  balancer:
     image: nginx
     networks:
       - loadnetwork
