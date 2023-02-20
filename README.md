@@ -61,4 +61,4 @@ docker exec -ti loadbalancer-server3-1 /bin/bash
 ansible-playbook playbook.yml
 ```
 
-El resultado son tres diferentes instancias en cada contenedor llamadas __app-i1__, __app-i2__, y __app-i3__.
+El resultado son tres diferentes instancias en cada contenedor llamadas __app-i1__, __app-i2__, y __app-i3__. Esto se puede comprobar checando los contenedores en cada contenedor usando el comando `docker ps -a`.
