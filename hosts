@@ -1,0 +1,4 @@
+localhost ansible_connection=local
+server1 ansible_user=root
+server2 ansible_user=root
+server3 ansible_user=root

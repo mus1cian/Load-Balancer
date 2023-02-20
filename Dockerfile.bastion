@@ -1,0 +1,22 @@
+FROM debian
+WORKDIR /root
+
+# Instalar Ansible y SSH
+RUN apt-get update && \
+    apt-get install -y ansible && apt-get install -y sudo  && apt-get install -y python3
+
+RUN mkdir /run/sshd
+
+RUN apt-get install -y openssh-server
+
+# Generar las claves SSH
+RUN ssh-keygen -t rsa -f /root/.ssh/id_rsa -q -N ""
+
+# Copiar la clave pública a authorized_keys
+RUN cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
+
+# Exponer los puertos necesarios
+EXPOSE 22 80
+
+#run shell indefinitely
+CMD service ssh start ; sleep infinity

@@ -1,0 +1,37 @@
+- hosts: ['server1', 'server2', 'server3']
+  become: true
+  tasks:
+    - name: Start Docker service
+      command: service docker start
+
+- hosts: ['localhost']
+  become: yes
+  tasks:
+  - name: Copy docker-compose.yml to server1
+    copy:
+      remote_src: no
+      src: /root/docker-compose-1.yml
+      dest: /root/docker-compose.yml
+    delegate_to: server1
+  - name: Copy docker-compose.yml to server2
+    copy:
+      remote_src: no
+      src: /root/docker-compose-2.yml
+      dest: /root/docker-compose.yml
+    delegate_to: server2
+  - name: Copy docker-compose.yml to server3
+    copy:
+      remote_src: no
+      src: /root/docker-compose-3.yml
+      dest: /root/docker-compose.yml
+    delegate_to: server3
+  - name: Ejecutar docker-compose up
+    become: true
+    command: docker compose up -d
+    args:
+      chdir: /root/
+    delegate_to: "{{ item }}"
+    with_items:
+      - server1
+      - server2
+      - server3

@@ -1,0 +1,75 @@
+version: '3'
+
+services:
+  bastion:
+    build:
+      context: .
+      dockerfile: Dockerfile.bastion
+    networks:
+      - loadnetwork
+    volumes:
+      - ./hosts:/root/hosts
+      - ./playbook.yml:/root/playbook.yml
+      - ./docker-compose-1.yml:/root/docker-compose-1.yml
+      - ./docker-compose-2.yml:/root/docker-compose-2.yml
+      - ./docker-compose-3.yml:/root/docker-compose-3.yml
+    read_only: false
+    privileged: true
+    tty: true
+
+
+  server1:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    networks:
+      - loadnetwork
+    depends_on:
+      - bastion
+    read_only: false
+    privileged: true
+    tty: true
+
+
+  server2:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    networks:
+      - loadnetwork
+    depends_on:
+      - bastion
+    read_only: false
+    privileged: true
+    tty: true
+
+
+  server3:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    networks:
+      - loadnetwork
+    depends_on:
+      - bastion
+    read_only: false
+    privileged: true
+    tty: true
+
+
+  nginx:
+    image: nginx
+    networks:
+      - loadnetwork
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+    depends_on:
+      - server1
+      - server2
+      - server3
+
+networks:
+  loadnetwork:
+    driver: bridge
